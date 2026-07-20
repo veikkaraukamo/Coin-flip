@@ -18,9 +18,16 @@ WHITE = (255, 255, 255)
 BLACK = (25, 25, 25)
 GOLD = (255, 215, 0)
 
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except AttributeError:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
+
 # Images
-heads = pygame.image.load("heads.png").convert_alpha()
-tails = pygame.image.load("tails.png").convert_alpha()
+heads = pygame.image.load(resource_path("heads.png")).convert_alpha()
+tails = pygame.image.load(resource_path("tails.png")).convert_alpha()
 
 heads = pygame.transform.smoothscale(heads, (220, 220))
 tails = pygame.transform.smoothscale(tails, (220, 220))

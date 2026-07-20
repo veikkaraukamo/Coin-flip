@@ -112,23 +112,21 @@ running = True
 while running:
 
     for event in pygame.event.get():
-
-    if event.type == pygame.QUIT:
-        running = False
-
-    elif event.type == pygame.KEYDOWN:
-
-        if event.key == pygame.K_ESCAPE:
+        if event.type == pygame.QUIT:
             running = False
 
-        elif event.key == pygame.K_SPACE and not flipping:
-            start_flip()
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                running = False
 
-        if event.key == pygame.K_r:
-            reset_game()
+            elif event.key == pygame.K_SPACE and not flipping:
+                start_flip()
 
-        if event.key == pygame.K_m:
-            toggle_sound()
+            if event.key == pygame.K_r:
+                reset_game()
+
+            if event.key == pygame.K_m:
+                toggle_sound()
 
     screen.fill(BLACK)
 

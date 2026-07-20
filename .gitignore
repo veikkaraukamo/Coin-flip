@@ -216,3 +216,19 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+/.vs/Coin-flip/config/applicationhost.config
+/.vs/Coin-flip/CopilotIndices/0.2.1657.32929/CodeChunks.db
+/.vs/Coin-flip/CopilotIndices/0.2.1657.32929/CodeChunks.db-shm
+/.vs/Coin-flip/CopilotIndices/0.2.1657.32929/CodeChunks.db-wal
+/.vs/Coin-flip/CopilotIndices/0.2.1657.32929/SemanticSymbols.db-shm
+/.vs/Coin-flip/CopilotIndices/0.2.1657.32929/SemanticSymbols.db-wal
+/.vs/Coin-flip/FileContentIndex/5c347d52-1f0d-4cdd-b823-3f9ea03835ac.vsidx
+/.vs/Coin-flip/FileContentIndex/d4ac37fc-6353-4a2c-b387-6539569fae52.vsidx
+/.vs/Coin-flip/v17/.wsuo
+/.vs/Coin-flip/v17/DocumentLayout.backup.json
+/.vs/Coin-flip/v17/DocumentLayout.json
+/.vs/slnx.sqlite
+/.vs/tasks.vs.json
+*.vsidx
+/.gitignore
+/.vs/slnx.sqlite

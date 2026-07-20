@@ -14,8 +14,12 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
+            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
@@ -24,7 +28,7 @@
               "RelativeDocumentMoniker": "main.py",
               "ToolTip": "C:\\Users\\Veikka\\source\\repos\\veikkaraukamo\\Coin-flip\\main.py",
               "RelativeToolTip": "main.py",
-              "ViewState": "AgIAALoAAAAAAAAAAAAAANsAAAAlAAAAAAAAAA==",
+              "ViewState": "AgIAALoAAAAAAAAAAAAAAOIAAAAKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002457|",
               "WhenOpened": "2026-07-20T08:47:43.025Z",
               "EditorCaption": ""

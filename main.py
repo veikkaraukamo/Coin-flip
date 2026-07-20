@@ -10,7 +10,7 @@ pygame.mixer.init()
 
 WIDTH, HEIGHT = 800, 600
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Head or tails?")
+pygame.display.set_caption("Coin flip")
 
 clock = pygame.time.Clock()
 
@@ -25,7 +25,7 @@ tails = pygame.image.load("tails.png").convert_alpha()
 heads = pygame.transform.smoothscale(heads, (220, 220))
 tails = pygame.transform.smoothscale(tails, (220, 220))
 
-current_image = heads, tails[random.randint(0, 1)]
+current_image = heads
 
 # Sounds if available
 flip_sound = None
@@ -39,6 +39,7 @@ if os.path.exists("land.wav"):
 
 # Font
 font = pygame.font.SysFont("Arial", 36)
+small_font = pygame.font.SysFont("Arial", 24)
 
 # Flip function
 def start_flip():
@@ -56,7 +57,7 @@ def reset_game():
     global flipping, result_text, current_image
 
     flipping = False
-    result_text = "Press SPACE to flip coin!"
+    result_text = ""
     current_image = heads
 
 # Toggle sound
@@ -102,9 +103,9 @@ class Particle:
 # Coin Animation Variables
 flipping = False
 flip_start = 0
-flip_duration = 1500
+flip_duration = 800
 
-result_text = "Press SPACE to flip coin"
+result_text = ""
 
 running = True
 
@@ -192,7 +193,7 @@ while running:
             particles.remove(particle)
 
     # Draw Text
-    text = font.render(result_text, True, WHITE)
+    text = font.render(result_text, True, GOLD)
 
     screen.blit(
         text,
@@ -202,7 +203,7 @@ while running:
         )
     )
 
-    info = font.render("Press SPACE to flip again", True, WHITE)
+    info = font.render("Press SPACE to flip", True, WHITE)
 
     screen.blit(
         info,
@@ -212,18 +213,15 @@ while running:
         )
     )
 
+    esc_text = small_font.render("Press ESC to exit", True, WHITE)
+    screen.blit(esc_text, (10, 10))
+
+    reset_text = small_font.render("R = Reset", True, WHITE)
+    screen.blit(reset_text, (10, 40))
+
     pygame.display.flip()
     clock.tick(60)
 
-    text = font.render("Press ESC to exit", True, WHITE)
-
-    screen.blit(
-        text,
-        (
-            WIDTH // 2 - text.get_width() // 2,
-            580
-        )
-    )
 
 pygame.quit()
 sys.exit()

@@ -8,8 +8,12 @@ import os
 pygame.init()
 pygame.mixer.init()
 
-WIDTH, HEIGHT = 800, 600
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
+WIDTH, HEIGHT = 1280, 720
+screen = pygame.display.set_mode(
+    (WIDTH, HEIGHT),
+    pygame.RESIZABLE
+)
+
 pygame.display.set_caption("Coin Flip Simulator")
 
 clock = pygame.time.Clock()
@@ -31,6 +35,20 @@ COIN_STYLES = [
     ("Classic", "classic"),
     ("Gold", "gold"),
     ("Neon", "neon"),
+]
+
+RESOLUTION_OPTIONS = [
+    ("800x600", (800, 600)),
+    ("1000x800", (1000, 800)),
+    ("1280x720", (1280, 720)),
+    ("1920x1080", (1920, 1080)),
+    ("2560x1440", (2560, 1440)),
+]
+
+FLIP_DURATION_OPTIONS = [
+    ("Fast", 500),
+    ("Normal", 800),
+    ("Slow", 1200),
 ]
 
 # Images
@@ -64,6 +82,46 @@ def refresh_coin_assets():
     if not flipping:
         current_image = heads
 
+def adjust_setting(step):
+    global resolution_index
+    global bg_index
+    global coin_style_index
+    global coin_style
+    global background_color
+    global sound_on
+    global particles_on
+    global flip_duration_index
+    global flip_duration
+    global WIDTH, HEIGHT
+    global screen
+
+    if selected_option == 0:        # Background
+        bg_index = (bg_index + step) % len(BACKGROUND_OPTIONS)
+        background_color = BACKGROUND_OPTIONS[bg_index][1]
+
+    elif selected_option == 1:      # Resolution
+        resolution_index = (resolution_index + step) % len(RESOLUTION_OPTIONS)
+        WIDTH, HEIGHT = RESOLUTION_OPTIONS[resolution_index][1]
+
+        screen = pygame.display.set_mode(
+    (WIDTH, HEIGHT),
+    pygame.RESIZABLE
+)
+
+    elif selected_option == 2:      # Coin style
+        coin_style_index = (coin_style_index + step) % len(COIN_STYLES)
+        coin_style = COIN_STYLES[coin_style_index][1]
+        refresh_coin_assets()
+
+    elif selected_option == 3:
+        toggle_sound()
+
+    elif selected_option == 4:
+        particles_on = not particles_on
+
+    elif selected_option == 5:
+        flip_duration_index = (flip_duration_index + step) % len(FLIP_DURATION_OPTIONS)
+        flip_duration = FLIP_DURATION_OPTIONS[flip_duration_index][1]
 
 heads = base_heads
 tails = base_tails
@@ -81,7 +139,7 @@ if os.path.exists("land.wav"):
 
 # Font
 font = pygame.font.SysFont("Arial", 36)
-small_font = pygame.font.SysFont("Arial", 28)
+small_font = pygame.font.SysFont("Arial", 24)
 
 # Flip function
 def start_flip():
@@ -100,7 +158,7 @@ def reset_game():
     global flipping, result_text, current_image
     global heads_count, tails_count
     flipping = False
-    result_text = "Press SPACE to flip coin!"
+    result_text = "Ready!"
     current_image = heads
 
     heads_count = 0
@@ -125,25 +183,8 @@ def toggle_settings():
     settings_open = not settings_open
 
 
-def adjust_setting(step):
-    global bg_index, coin_style_index, coin_style, background_color, sound_on, particles_on
-
-    if selected_option == 0:
-        bg_index = (bg_index + step) % len(BACKGROUND_OPTIONS)
-        background_color = BACKGROUND_OPTIONS[bg_index][1]
-    elif selected_option == 1:
-        coin_style_index = (coin_style_index + step) % len(COIN_STYLES)
-        coin_style = COIN_STYLES[coin_style_index][1]
-        refresh_coin_assets()
-    elif selected_option == 2:
-        toggle_sound()
-    elif selected_option == 3:
-        particles_on = not particles_on
-
-
 # Particle Effect
 particles = []
-
 
 class Particle:
     def __init__(self, x, y):
@@ -169,19 +210,22 @@ class Particle:
         )
 
 
-# Coin Animation Variables
+#Variables
 flipping = False
 flip_start = 0
-flip_duration = 1500
+flip_duration_index = 1  # Default to "Normal" duration
+flip_duration = FLIP_DURATION_OPTIONS[flip_duration_index][1]  # Default to "Normal" duration
 
-result_text = "Press SPACE to flip coin"
+result_text = "Ready!"
 
 running = True
 settings_open = False
 selected_option = 0
 bg_index = 0
+resolution_index = 2  # Default to "1280x720"
 coin_style_index = 0
 coin_style = COIN_STYLES[coin_style_index][1]
+coin = current_image
 background_color = BACKGROUND_OPTIONS[bg_index][1]
 sound_on = True
 particles_on = True
@@ -205,9 +249,9 @@ while running:
 
             elif settings_open:
                 if event.key in (pygame.K_UP, pygame.K_w):
-                    selected_option = (selected_option - 1) % 4
+                    selected_option = (selected_option - 1) % 6
                 elif event.key in (pygame.K_DOWN, pygame.K_s):
-                    selected_option = (selected_option + 1) % 4
+                    selected_option = (selected_option + 1) % 6
                 elif event.key in (pygame.K_LEFT, pygame.K_a):
                     adjust_setting(-1)
                 elif event.key in (pygame.K_RIGHT, pygame.K_d):
@@ -311,13 +355,13 @@ while running:
         )
     )
 
-    info = font.render("Press SPACE to flip again", True, text_color)
+    info = font.render("Press SPACE to flip coin", True, text_color)
 
     screen.blit(
         info,
         (
             WIDTH // 2 - info.get_width() // 2,
-            520
+            HEIGHT - 80
         )
     )
 
@@ -327,34 +371,44 @@ while running:
         bottom_text,
         (
             WIDTH // 2 - bottom_text.get_width() // 2,
-            580
+            HEIGHT - 40
         )
     )
 
     if settings_open:
-        panel = pygame.Surface((500, 320), pygame.SRCALPHA)
-        panel.fill((20, 20, 20, 220))
-        pygame.draw.rect(panel, (255, 255, 255, 180), panel.get_rect(), 2)
-        screen.blit(panel, (150, 120))
-
-        title = font.render("Settings", True, WHITE)
-        screen.blit(title, (WIDTH // 2 - title.get_width() // 2, 140))
 
         items = [
             ("Background", BACKGROUND_OPTIONS[bg_index][0]),
+            ("Resolution", RESOLUTION_OPTIONS[resolution_index][0]),
             ("Coin style", COIN_STYLES[coin_style_index][0]),
             ("Sound", "On" if sound_on else "Off"),
             ("Particles", "On" if particles_on else "Off"),
+            ("Flip Duration", FLIP_DURATION_OPTIONS[flip_duration_index][0]),
         ]
+
+        panel_width = 500
+        panel_height = 140 + len(items) * 38
+
+        panel = pygame.Surface((panel_width, panel_height), pygame.SRCALPHA)
+        panel.fill((20, 20, 20, 220))
+        pygame.draw.rect(panel, (255, 255, 255, 180), panel.get_rect(), 2)
+
+        panel_x = WIDTH // 2 - panel_width // 2
+        panel_y = HEIGHT // 2 - panel_height // 2
+
+        screen.blit(panel, (panel_x, panel_y))
+
+        title = font.render("Settings", True, WHITE)
+        screen.blit(title, (panel_x + 170, panel_y + 20))
 
         for index, (label, value) in enumerate(items):
             prefix = ">" if index == selected_option else " "
             color = GOLD if index == selected_option else WHITE
             option_text = small_font.render(f"{prefix} {label}: {value}", True, color)
-            screen.blit(option_text, (220, 200 + index * 38))
+            screen.blit(option_text, (panel_x + 40, panel_y + 80 + index * 38))
 
-        help_text = small_font.render("Arrows change values • ESC closes", True, WHITE)
-        screen.blit(help_text, (200, 380))
+        help_text = small_font.render("Arrows change values • ESC closes", True, text_color)
+        screen.blit(help_text, (panel_x + 20, panel_y + 160 + len(items) * 38))
 
     pygame.display.flip()
     clock.tick(60)

@@ -50,10 +50,16 @@ FLIP_DURATION_OPTIONS = [
     ("Normal", 800),
     ("Slow", 1200),
 ]
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
 
+    return os.path.join(base_path, relative_path)
 # Images
-base_heads = pygame.image.load("heads.png").convert_alpha()
-base_tails = pygame.image.load("tails.png").convert_alpha()
+base_heads = pygame.image.load(resource_path("heads.png")).convert_alpha()
+base_tails = pygame.image.load(resource_path("tails.png")).convert_alpha()
 
 base_heads = pygame.transform.smoothscale(base_heads, (220, 220))
 base_tails = pygame.transform.smoothscale(base_tails, (220, 220))
@@ -131,11 +137,14 @@ current_image = heads
 flip_sound = None
 land_sound = None
 
-if os.path.exists("flip.wav"):
-    flip_sound = pygame.mixer.Sound("flip.wav")
+flip_path = resource_path("flip.wav")
+land_path = resource_path("land.wav")
 
-if os.path.exists("land.wav"):
-    land_sound = pygame.mixer.Sound("land.wav")
+if os.path.exists(flip_path):
+    flip_sound = pygame.mixer.Sound(flip_path)
+
+if os.path.exists(land_path):
+    land_sound = pygame.mixer.Sound(land_path)
 
 # Font
 font = pygame.font.SysFont("Arial", 36)
